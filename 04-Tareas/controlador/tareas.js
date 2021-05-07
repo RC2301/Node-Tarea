@@ -6,7 +6,7 @@ let tareasPorHacer = [];
 
 const guardarDatos = () => {
     let data = JSON.stringify(tareasPorHacer);
-    fs.writeFile('./data/datos.json', data, (err) => {
+    fs.writeFile('../data/datos.json', data, (err) => {
         if (err) throw new Error('No se pudo guardar la data', err)
     });
 }
@@ -28,11 +28,16 @@ const crear = (descripcion) => {
         completado: false
     }
 
-    tareasPorHacer.push(tarea);
+    let doble = tareasPorHacer.filter(tarea => tarea.descripcion === descripcion);
 
-    guardarDatos();
-
-    return tarea;
+    if (doble >= 0) {
+        tareasPorHacer.push(tarea);
+        guardarDatos();
+        console.log('');
+        return tarea;
+    }
+    console.log('');
+    return 'Tarea creada, intente ingresar otra.'.bgCyan;
 }
 
 const listar = () => {
@@ -72,17 +77,6 @@ const actualizar = (descripcion, completado = true) => {
 
 const eliminar = (descripcion) => {
     leerDatos();
-
-    /*let tarea = {
-        descripcion,
-        completado: false
-    }
-
-    tareasPorHacer.pop(tarea);
-
-    guardarDatos();
-
-    return tarea; */
 
     let index = tareasPorHacer.findIndex(tarea => tarea.descripcion === descripcion);
 
